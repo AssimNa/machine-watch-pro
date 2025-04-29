@@ -11,8 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { AlertTriangle, ArrowLeft, Calendar, Clock, Wrench, User, FileText } from "lucide-react";
-import { interventions, machines, users } from "@/data/mockData";
-import { Intervention } from "@/data/mockData";
+import { interventions, machines, users, Intervention } from "@/data/mockData";
 import { useToast } from "@/hooks/use-toast";
 
 const InterventionDetails = () => {
@@ -44,7 +43,11 @@ const InterventionDetails = () => {
       console.log(`Updating intervention ${intervention.id} status to ${newStatus}`);
       
       // For now, just update the local state for demonstration
-      const updatedIntervention = { ...intervention, status: newStatus };
+      const updatedIntervention: Intervention = { 
+        ...intervention, 
+        status: newStatus 
+      };
+      
       setIntervention(updatedIntervention);
       
       // Show toast notification

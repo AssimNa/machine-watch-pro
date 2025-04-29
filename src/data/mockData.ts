@@ -1,5 +1,3 @@
-import { User } from "@/types";
-
 export type MachineStatusType = "operational" | "maintenance" | "broken" | "offline";
 
 export type Machine = {
@@ -13,7 +11,7 @@ export type Machine = {
   nextMaintenance: string;
   status: MachineStatusType;
   image: string;
-  technicalDocUrl?: string; // Added this optional property
+  technicalDocUrl?: string;
 };
 
 export type Intervention = {
@@ -21,7 +19,7 @@ export type Intervention = {
   machineId: string;
   technicianId: string;
   type: "preventive" | "corrective";
-  priority: "low" | "medium" | "high";
+  priority: "low" | "medium" | "high" | "critical";
   status: "pending" | "in_progress" | "completed" | "cancelled";
   startDate: string;
   endDate: string | null;
@@ -37,7 +35,7 @@ export type User = {
   email: string;
   role: string;
   permissions: string[];
-  name?: string; // Adding name property for compatibility
+  name?: string;
 };
 
 export const users: User[] = [
@@ -166,7 +164,7 @@ export const machines: Machine[] = [
   }
 ];
 
-export const interventions = [
+export const interventions: Intervention[] = [
   {
     id: "i1",
     machineId: "m1",

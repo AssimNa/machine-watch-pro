@@ -22,7 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { machines, users, interventions } from "@/data/mockData";
+import { machines, users, interventions, Intervention } from "@/data/mockData";
 
 const formSchema = z.object({
   machineId: z.string({
@@ -78,15 +78,18 @@ const AddInterventionForm = ({ machineId, onSuccess }: AddInterventionFormProps)
       console.log("Adding new intervention:", values);
       
       // Add the intervention to the list (for demo purposes)
-      const newIntervention = {
+      const newIntervention: Intervention = {
         id: (interventions.length + 1).toString(),
         machineId: values.machineId,
         technicianId: values.technicianId,
-        type: values.type as 'preventive' | 'corrective',
-        status: 'pending' as const,
+        type: values.type,
+        status: 'pending',
         startDate: values.startDate,
+        endDate: null,
         description: values.description,
-        priority: values.priority as 'low' | 'medium' | 'high' | 'critical',
+        priority: values.priority,
+        cost: 0, // Default cost
+        parts: [], // Empty parts list by default
       };
       
       interventions.push(newIntervention);
