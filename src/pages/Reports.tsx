@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { Calendar, FileText, FilePpt, FileWord, Download } from "lucide-react";
+import { Calendar, FileText, Download } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -24,8 +24,8 @@ const Reports = () => {
 
   const exportFormats = [
     { id: "pdf", name: "PDF", icon: FileText },
-    { id: "word", name: "Word Document", icon: FileWord },
-    { id: "ppt", name: "PowerPoint", icon: FilePpt },
+    { id: "word", name: "Word Document", icon: FileText },
+    { id: "ppt", name: "PowerPoint", icon: FileText },
   ];
 
   const handleGenerateReport = () => {

@@ -1,6 +1,6 @@
 import { User } from "@/types";
 
-export type MachineStatusType = "operational" | "maintenance" | "broken";
+export type MachineStatusType = "operational" | "maintenance" | "broken" | "offline";
 
 export type Machine = {
   id: string;
@@ -13,6 +13,7 @@ export type Machine = {
   nextMaintenance: string;
   status: MachineStatusType;
   image: string;
+  technicalDocUrl?: string; // Added this optional property
 };
 
 export type Intervention = {
@@ -29,6 +30,16 @@ export type Intervention = {
   parts: string[];
 };
 
+export type User = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: string;
+  permissions: string[];
+  name?: string; // Adding name property for compatibility
+};
+
 export const users: User[] = [
   {
     id: "u1",
@@ -37,6 +48,7 @@ export const users: User[] = [
     email: "alice.smith@example.com",
     role: "administrator",
     permissions: ["read", "write", "update", "delete"],
+    name: "Alice Smith",
   },
   {
     id: "u2",
@@ -45,6 +57,7 @@ export const users: User[] = [
     email: "bob.johnson@example.com",
     role: "manager",
     permissions: ["read", "write", "update"],
+    name: "Bob Johnson",
   },
   {
     id: "u3",
@@ -53,6 +66,7 @@ export const users: User[] = [
     email: "charlie.brown@example.com",
     role: "technician",
     permissions: ["read", "write"],
+    name: "Charlie Brown",
   },
 ];
 
@@ -64,6 +78,7 @@ export const technicians = [
     email: "david.williams@example.com",
     specialty: "Electrical",
     availability: true,
+    name: "David Williams",
   },
   {
     id: "t2",
@@ -72,6 +87,7 @@ export const technicians = [
     email: "emily.jones@example.com",
     specialty: "Mechanical",
     availability: false,
+    name: "Emily Jones",
   },
 ];
 
@@ -275,3 +291,31 @@ export const interventionStatus = [
     value: "cancelled",
   },
 ];
+
+export const getMachineById = (id: string): Machine | undefined => {
+  return machines.find(machine => machine.id === id);
+};
+
+export const getInterventionsByMachineId = (machineId: string): Intervention[] => {
+  return interventions.filter(intervention => intervention.machineId === machineId);
+};
+
+export const getUserById = (id: string): User | undefined => {
+  // First check users array
+  const user = users.find(user => user.id === id);
+  if (user) return user;
+  
+  // Then check technicians array
+  const technician = technicians.find(tech => tech.id === id);
+  if (technician) return {
+    id: technician.id,
+    firstName: technician.firstName,
+    lastName: technician.lastName,
+    email: technician.email,
+    role: "technician",
+    permissions: ["read", "write"],
+    name: `${technician.firstName} ${technician.lastName}`
+  };
+  
+  return undefined;
+};
