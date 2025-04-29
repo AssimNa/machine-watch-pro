@@ -17,6 +17,7 @@ import InterventionDetails from "./pages/InterventionDetails";
 import Reports from "./pages/Reports";
 import NotFound from "./pages/NotFound";
 
+// Create a client
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -33,6 +34,8 @@ const App = () => (
             <Route path="interventions" element={<Interventions />} />
             <Route path="interventions/:id" element={<InterventionDetails />} />
             <Route path="reports" element={<Reports />} />
+            <Route path="settings" element={<Dashboard />} /> {/* Placeholder for Settings */}
+            <Route path="history" element={<Dashboard />} /> {/* Placeholder for History */}
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
