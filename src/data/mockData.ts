@@ -1,212 +1,277 @@
-// Types
-export interface Machine {
+import { User } from "@/types";
+
+export type MachineStatusType = "operational" | "maintenance" | "broken";
+
+export type Machine = {
   id: string;
   name: string;
   reference: string;
   location: string;
+  department: string;
   installationDate: string;
-  technicalDocUrl?: string;
-  image?: string;
-  status: 'operational' | 'maintenance' | 'broken';
-  lastMaintenance?: string;
-  nextMaintenance?: string;
-  department?: string;
-}
+  lastMaintenance: string;
+  nextMaintenance: string;
+  status: MachineStatusType;
+  image: string;
+};
 
-export type InterventionType = 'preventive' | 'corrective';
-export type InterventionStatus = 'pending' | 'in_progress' | 'completed' | 'cancelled';
-
-export interface Intervention {
+export type Intervention = {
   id: string;
   machineId: string;
   technicianId: string;
-  type: InterventionType;
-  status: InterventionStatus;
+  type: "preventive" | "corrective";
+  priority: "low" | "medium" | "high";
+  status: "pending" | "in_progress" | "completed" | "cancelled";
   startDate: string;
-  endDate?: string;
-  cost?: number;
+  endDate: string | null;
   description: string;
-  priority: 'low' | 'medium' | 'high' | 'critical';
-}
-
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: 'technician' | 'manager' | 'admin';
-}
-
-// Mock data
-export const machines = [
-  {
-    id: "1",
-    name: "CNC Mill T-800",
-    reference: "CNC-800-X",
-    location: "Building A - Floor 2",
-    department: "Production",
-    installationDate: "2022-01-15",
-    lastMaintenance: "2023-01-05",
-    nextMaintenance: "2023-07-10",
-    status: "operational",
-    image: "/lovable-uploads/b6cb4be3-9631-48b3-9988-f0956cc84f18.png"
-  },
-  {
-    id: "2",
-    name: "Hydraulic Press HP-5000",
-    reference: "HP-5000-A",
-    location: "Building B - Floor 1",
-    department: "Fabrication",
-    installationDate: "2021-08-23",
-    lastMaintenance: "2023-02-12",
-    nextMaintenance: "2023-06-12",
-    status: "maintenance",
-    image: null
-  },
-  {
-    id: "3",
-    name: "Laser Cutter LC-X2",
-    reference: "LC-X2-Ultra",
-    location: "Building A - Floor 1",
-    department: "Precision Cutting",
-    installationDate: "2022-05-17",
-    lastMaintenance: "2023-03-01",
-    nextMaintenance: "2023-09-01",
-    status: "operational",
-    image: null
-  },
-  {
-    id: "4",
-    name: "Metal Testing Unit MTU-7",
-    reference: "MTU-7-Pro",
-    location: "Building C - Lab Area",
-    department: "Quality Control",
-    installationDate: "2021-11-30",
-    lastMaintenance: "2023-01-18",
-    nextMaintenance: "2023-07-18",
-    status: "broken",
-    image: null
-  },
-  {
-    id: "5",
-    name: "Robotic Arm RA-9",
-    reference: "RA-9-Plus",
-    location: "Building B - Floor 2",
-    department: "Assembly",
-    installationDate: "2022-03-24",
-    lastMaintenance: "2023-02-28",
-    nextMaintenance: "2023-06-28",
-    status: "offline",
-    image: null
-  },
-  {
-    id: "6",
-    name: "Industrial Furnace IF-3000",
-    reference: "IF-3000-HT",
-    location: "Building D - Heat Treatment",
-    department: "Heat Treatment",
-    installationDate: "2021-07-12",
-    lastMaintenance: "2023-04-10",
-    nextMaintenance: "2023-10-10",
-    status: "operational",
-    image: null
-  }
-];
-
-export const interventions: Intervention[] = [
-  {
-    id: '1',
-    machineId: '2',
-    technicianId: '1',
-    type: 'preventive',
-    status: 'in_progress',
-    startDate: '2023-07-15T09:00:00',
-    description: 'Maintenance préventive - Changement des filtres et lubrification',
-    priority: 'medium',
-  },
-  {
-    id: '2',
-    machineId: '3',
-    technicianId: '2',
-    type: 'corrective',
-    status: 'pending',
-    startDate: '2023-07-16T10:30:00',
-    description: 'Panne hydraulique - Fuite au niveau du vérin principal',
-    priority: 'high',
-  },
-  {
-    id: '3',
-    machineId: '5',
-    technicianId: '1',
-    type: 'preventive',
-    status: 'completed',
-    startDate: '2023-07-10T14:00:00',
-    endDate: '2023-07-10T16:30:00',
-    cost: 350,
-    description: 'Maintenance préventive - Vérification tension courroie et alignement',
-    priority: 'low',
-  },
-  {
-    id: '4',
-    machineId: '1',
-    technicianId: '3',
-    type: 'corrective',
-    status: 'completed',
-    startDate: '2023-07-08T11:00:00',
-    endDate: '2023-07-08T14:15:00',
-    cost: 520,
-    description: 'Remplacement moteur broche suite à surchauffe',
-    priority: 'critical',
-  },
-  {
-    id: '5',
-    machineId: '4',
-    technicianId: '2',
-    type: 'preventive',
-    status: 'cancelled',
-    startDate: '2023-07-12T09:00:00',
-    description: 'Calibration des axes du robot - Annulé car machine en production',
-    priority: 'medium',
-  },
-];
+  cost: number;
+  parts: string[];
+};
 
 export const users: User[] = [
   {
-    id: '1',
-    name: 'Thomas Durand',
-    email: 'thomas.durand@example.com',
-    role: 'technician',
+    id: "u1",
+    firstName: "Alice",
+    lastName: "Smith",
+    email: "alice.smith@example.com",
+    role: "administrator",
+    permissions: ["read", "write", "update", "delete"],
   },
   {
-    id: '2',
-    name: 'Sophie Martin',
-    email: 'sophie.martin@example.com',
-    role: 'technician',
+    id: "u2",
+    firstName: "Bob",
+    lastName: "Johnson",
+    email: "bob.johnson@example.com",
+    role: "manager",
+    permissions: ["read", "write", "update"],
   },
   {
-    id: '3',
-    name: 'Jean Dupont',
-    email: 'jean.dupont@example.com',
-    role: 'manager',
-  },
-  {
-    id: '4',
-    name: 'Admin',
-    email: 'admin@example.com',
-    role: 'admin',
+    id: "u3",
+    firstName: "Charlie",
+    lastName: "Brown",
+    email: "charlie.brown@example.com",
+    role: "technician",
+    permissions: ["read", "write"],
   },
 ];
 
-// Helper function to get machine by ID
-export const getMachineById = (id: string): Machine | undefined => {
-  return machines.find(machine => machine.id === id);
-};
+export const technicians = [
+  {
+    id: "t1",
+    firstName: "David",
+    lastName: "Williams",
+    email: "david.williams@example.com",
+    specialty: "Electrical",
+    availability: true,
+  },
+  {
+    id: "t2",
+    firstName: "Emily",
+    lastName: "Jones",
+    email: "emily.jones@example.com",
+    specialty: "Mechanical",
+    availability: false,
+  },
+];
 
-// Helper function to get interventions by machine ID
-export const getInterventionsByMachineId = (machineId: string): Intervention[] => {
-  return interventions.filter(intervention => intervention.machineId === machineId);
-};
+export const machines: Machine[] = [
+  {
+    id: "m1",
+    name: "CNC Machine X7000",
+    reference: "CNCX7000-123",
+    location: "Production Hall A",
+    department: "Manufacturing",
+    installationDate: "2021-03-15",
+    lastMaintenance: "2023-02-10",
+    nextMaintenance: "2023-05-10",
+    status: "operational",
+    image: "https://images.unsplash.com/photo-1612968081277-a4b3ee4ae394?q=80&w=2003&auto=format&fit=crop&ixlib=rb-4.0.3"
+  },
+  {
+    id: "m2",
+    name: "Hydraulic Press HP500",
+    reference: "HP500-456",
+    location: "Production Hall B",
+    department: "Manufacturing",
+    installationDate: "2020-06-22",
+    lastMaintenance: "2023-01-05",
+    nextMaintenance: "2023-04-05",
+    status: "maintenance",
+    image: "https://images.unsplash.com/photo-1620275765876-88e763c80678?q=80&w=2076&auto=format&fit=crop&ixlib=rb-4.0.3"
+  },
+  {
+    id: "m3",
+    name: "Assembly Robot AR200",
+    reference: "AR200-789",
+    location: "Assembly Line 1",
+    department: "Assembly",
+    installationDate: "2022-01-10",
+    lastMaintenance: "2023-03-01",
+    nextMaintenance: "2023-06-01",
+    status: "broken",
+    image: "https://images.unsplash.com/photo-1581093804475-577d72e13cfd?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3"
+  },
+  {
+    id: "m4",
+    name: "Laser Cutter LC1000",
+    reference: "LC1000-101",
+    location: "Cutting Department",
+    department: "Manufacturing",
+    installationDate: "2021-09-05",
+    lastMaintenance: "2023-02-20",
+    nextMaintenance: "2023-05-20",
+    status: "operational",
+    image: "https://images.unsplash.com/photo-1573298825661-bb2717599106?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3"
+  },
+  {
+    id: "m5",
+    name: "Conveyor System CS500",
+    reference: "CS500-202",
+    location: "Packaging Area",
+    department: "Logistics",
+    installationDate: "2020-11-18",
+    lastMaintenance: "2023-01-15",
+    nextMaintenance: "2023-04-15",
+    status: "operational",
+    image: "https://images.unsplash.com/photo-1569135545544-e7bb01c2a024?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3"
+  },
+  {
+    id: "m6",
+    name: "Industrial Oven IO300",
+    reference: "IO300-303",
+    location: "Heat Treatment Area",
+    department: "Manufacturing",
+    installationDate: "2022-02-28",
+    lastMaintenance: "2023-03-10",
+    nextMaintenance: "2023-06-10",
+    status: "maintenance",
+    image: "https://images.unsplash.com/photo-1518729597691-455180c7e0ec?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3"
+  }
+];
 
-// Helper function to get user by ID
-export const getUserById = (id: string): User | undefined => {
-  return users.find(user => user.id === id);
-};
+export const interventions = [
+  {
+    id: "i1",
+    machineId: "m1",
+    technicianId: "t1",
+    type: "preventive",
+    priority: "medium",
+    status: "completed",
+    startDate: "2023-02-10",
+    endDate: "2023-02-10",
+    description: "Scheduled maintenance and inspection.",
+    cost: 500,
+    parts: ["Filter", "Oil"],
+  },
+  {
+    id: "i2",
+    machineId: "m2",
+    technicianId: "t2",
+    type: "corrective",
+    priority: "high",
+    status: "in_progress",
+    startDate: "2023-03-15",
+    endDate: null,
+    description: "Repair of hydraulic system failure.",
+    cost: 1200,
+    parts: ["Hydraulic Pump", "Seals"],
+  },
+  {
+    id: "i3",
+    machineId: "m3",
+    technicianId: "t1",
+    type: "corrective",
+    priority: "high",
+    status: "pending",
+    startDate: "2023-03-20",
+    endDate: null,
+    description: "Troubleshooting and repair of robot arm malfunction.",
+    cost: 800,
+    parts: ["Servo Motor", "Wiring"],
+  },
+  {
+    id: "i4",
+    machineId: "m4",
+    technicianId: "t2",
+    type: "preventive",
+    priority: "medium",
+    status: "completed",
+    startDate: "2023-02-20",
+    endDate: "2023-02-20",
+    description: "Laser alignment and lens cleaning.",
+    cost: 300,
+    parts: ["Lens Cleaning Solution"],
+  },
+  {
+    id: "i5",
+    machineId: "m5",
+    technicianId: "t1",
+    type: "preventive",
+    priority: "low",
+    status: "completed",
+    startDate: "2023-01-15",
+    endDate: "2023-01-15",
+    description: "Belt inspection and lubrication.",
+    cost: 150,
+    parts: ["Lubricant"],
+  },
+  {
+    id: "i6",
+    machineId: "m6",
+    technicianId: "t2",
+    type: "corrective",
+    priority: "medium",
+    status: "completed",
+    startDate: "2023-03-10",
+    endDate: "2023-03-10",
+    description: "Temperature sensor replacement.",
+    cost: 400,
+    parts: ["Temperature Sensor"],
+  },
+];
+
+export const priorities = [
+  {
+    label: "High",
+    value: "high",
+  },
+  {
+    label: "Medium",
+    value: "medium",
+  },
+  {
+    label: "Low",
+    value: "low",
+  },
+];
+
+export const interventionTypes = [
+  {
+    label: "Preventive",
+    value: "preventive",
+  },
+  {
+    label: "Corrective",
+    value: "corrective",
+  },
+];
+
+export const interventionStatus = [
+  {
+    label: "Pending",
+    value: "pending",
+  },
+  {
+    label: "In Progress",
+    value: "in_progress",
+  },
+  {
+    label: "Completed",
+    value: "completed",
+  },
+  {
+    label: "Cancelled",
+    value: "cancelled",
+  },
+];
