@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { LayoutDashboard, Wrench, ClipboardList, History, BarChart3, Settings, Menu, X, LogOut } from "lucide-react";
+import { LayoutDashboard, Wrench, ClipboardList, History, BarChart3, Settings, Menu, X, LogOut, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,10 +17,12 @@ import {
   SidebarMenuItem,
   SidebarProvider,
 } from "@/components/ui/sidebar";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const DashboardLayout = () => {
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const isMobile = useIsMobile();
 
   const navItems = [
     { name: 'Dashboard', path: '/', icon: LayoutDashboard },
@@ -31,8 +33,12 @@ const DashboardLayout = () => {
     { name: 'Paramètres', path: '/settings', icon: Settings },
   ];
 
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
   return (
-    <SidebarProvider defaultOpen={true}>
+    <SidebarProvider defaultOpen={sidebarOpen}>
       <div className="min-h-screen w-full bg-gray-50 flex flex-col">
         {/* Header */}
         <header className="bg-white border-b border-gray-200 text-gray-800 shadow-sm h-16 flex items-center px-4 sticky top-0 z-50">
@@ -41,15 +47,24 @@ const DashboardLayout = () => {
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className="md:hidden"
-                onClick={() => setSidebarOpen(!sidebarOpen)}
+                className="flex md:hidden"
+                onClick={toggleSidebar}
               >
-                {sidebarOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                {isMobile && sidebarOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </Button>
               <h1 className="text-xl font-bold">Machine Watch Pro</h1>
             </div>
-            <div>
-              {/* Placeholder for user profile/settings */}
+            <div className="flex items-center gap-2">
+              {/* Toggle sidebar button for desktop */}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="hidden md:flex"
+                onClick={toggleSidebar}
+              >
+                {sidebarOpen ? <ChevronRight className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              </Button>
+              {/* Profile button */}
               <Button variant="outline" size="icon">
                 <Settings className="h-5 w-5" />
               </Button>
@@ -103,7 +118,7 @@ const DashboardLayout = () => {
             </SidebarFooter>
           </Sidebar>
 
-          {/* Main Content - removed the top margin that was creating space */}
+          {/* Main Content */}
           <main className="flex-grow p-6">
             <Outlet />
           </main>
