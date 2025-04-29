@@ -33,10 +33,13 @@ const formSchema = z.object({
   location: z.string().min(2, {
     message: "L'emplacement doit être spécifié.",
   }),
+  department: z.string().min(2, {
+    message: "Le service doit être spécifié.",
+  }),
   installationDate: z.string().min(1, {
     message: "La date d'installation est requise.",
   }),
-  status: z.enum(["operational", "maintenance", "broken"], {
+  status: z.enum(["operational", "maintenance", "broken", "offline"], {
     required_error: "L'état de la machine doit être sélectionné.",
   }),
 });
@@ -47,6 +50,7 @@ type AddMachineFormProps = {
 
 const AddMachineForm = ({ onSuccess }: AddMachineFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -55,6 +59,7 @@ const AddMachineForm = ({ onSuccess }: AddMachineFormProps) => {
       name: "",
       reference: "",
       location: "",
+      department: "",
       installationDate: new Date().toISOString().split('T')[0],
       status: "operational",
     },
@@ -67,6 +72,7 @@ const AddMachineForm = ({ onSuccess }: AddMachineFormProps) => {
     setTimeout(() => {
       // In a real app, you would call an API here
       console.log("Adding new machine:", values);
+      console.log("Image file:", imageFile);
       
       // Add the machine to the list (for demo purposes)
       const newMachine = {
@@ -74,8 +80,12 @@ const AddMachineForm = ({ onSuccess }: AddMachineFormProps) => {
         name: values.name,
         reference: values.reference,
         location: values.location,
+        department: values.department,
         installationDate: values.installationDate,
-        status: values.status as 'operational' | 'maintenance' | 'broken',
+        status: values.status as 'operational' | 'maintenance' | 'broken' | 'offline',
+        lastMaintenance: null,
+        nextMaintenance: null,
+        image: imageFile ? URL.createObjectURL(imageFile) : null,
       };
       
       machines.push(newMachine);
@@ -94,6 +104,12 @@ const AddMachineForm = ({ onSuccess }: AddMachineFormProps) => {
       }
     }, 1000);
   }
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setImageFile(e.target.files[0]);
+    }
+  };
 
   return (
     <Form {...form}>
@@ -143,6 +159,7 @@ const AddMachineForm = ({ onSuccess }: AddMachineFormProps) => {
                     <SelectItem value="operational">Opérationnel</SelectItem>
                     <SelectItem value="maintenance">En maintenance</SelectItem>
                     <SelectItem value="broken">En panne</SelectItem>
+                    <SelectItem value="offline">Hors ligne</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -167,6 +184,20 @@ const AddMachineForm = ({ onSuccess }: AddMachineFormProps) => {
         
         <FormField
           control={form.control}
+          name="department"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Service</FormLabel>
+              <FormControl>
+                <Input placeholder="Ex: Production" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        
+        <FormField
+          control={form.control}
           name="installationDate"
           render={({ field }) => (
             <FormItem>
@@ -179,11 +210,28 @@ const AddMachineForm = ({ onSuccess }: AddMachineFormProps) => {
           )}
         />
         
+        <div className="space-y-2">
+          <FormLabel>Image de la machine</FormLabel>
+          <Input 
+            type="file" 
+            accept="image/*" 
+            onChange={handleImageChange}
+            className="cursor-pointer"
+          />
+          {imageFile && (
+            <div className="mt-2">
+              <p className="text-sm text-muted-foreground">
+                Image sélectionnée: {imageFile.name}
+              </p>
+            </div>
+          )}
+        </div>
+        
         <div className="flex justify-end gap-2">
           <Button type="button" variant="outline" onClick={onSuccess}>
             Annuler
           </Button>
-          <Button type="submit" disabled={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting} className="bg-blue-600 hover:bg-blue-700">
             {isSubmitting ? "Création en cours..." : "Créer la machine"}
           </Button>
         </div>

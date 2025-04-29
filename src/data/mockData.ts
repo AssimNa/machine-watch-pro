@@ -1,4 +1,3 @@
-
 // Types
 export interface Machine {
   id: string;
@@ -10,6 +9,8 @@ export interface Machine {
   image?: string;
   status: 'operational' | 'maintenance' | 'broken';
   lastMaintenance?: string;
+  nextMaintenance?: string;
+  department?: string;
 }
 
 export type InterventionType = 'preventive' | 'corrective';
@@ -36,56 +37,78 @@ export interface User {
 }
 
 // Mock data
-export const machines: Machine[] = [
+export const machines = [
   {
-    id: '1',
-    name: 'Machine CNC Alpha',
-    reference: 'CNC-2023-A',
-    location: 'Atelier Principal - Zone A',
-    installationDate: '2023-01-15',
-    technicalDocUrl: '/docs/cnc-alpha-manual.pdf',
-    status: 'operational',
-    lastMaintenance: '2023-06-10',
+    id: "1",
+    name: "CNC Mill T-800",
+    reference: "CNC-800-X",
+    location: "Building A - Floor 2",
+    department: "Production",
+    installationDate: "2022-01-15",
+    lastMaintenance: "2023-01-05",
+    nextMaintenance: "2023-07-10",
+    status: "operational",
+    image: "/lovable-uploads/b6cb4be3-9631-48b3-9988-f0956cc84f18.png"
   },
   {
-    id: '2',
-    name: 'Fraiseuse Beta',
-    reference: 'FR-2021-B',
-    location: 'Atelier Principal - Zone B',
-    installationDate: '2021-05-22',
-    technicalDocUrl: '/docs/fraiseuse-beta-manual.pdf',
-    status: 'maintenance',
-    lastMaintenance: '2023-05-05',
+    id: "2",
+    name: "Hydraulic Press HP-5000",
+    reference: "HP-5000-A",
+    location: "Building B - Floor 1",
+    department: "Fabrication",
+    installationDate: "2021-08-23",
+    lastMaintenance: "2023-02-12",
+    nextMaintenance: "2023-06-12",
+    status: "maintenance",
+    image: null
   },
   {
-    id: '3',
-    name: 'Presse Hydraulique Delta',
-    reference: 'PH-2020-D',
-    location: 'Atelier Secondaire',
-    installationDate: '2020-11-30',
-    technicalDocUrl: '/docs/presse-delta-manual.pdf',
-    status: 'broken',
-    lastMaintenance: '2023-04-15',
+    id: "3",
+    name: "Laser Cutter LC-X2",
+    reference: "LC-X2-Ultra",
+    location: "Building A - Floor 1",
+    department: "Precision Cutting",
+    installationDate: "2022-05-17",
+    lastMaintenance: "2023-03-01",
+    nextMaintenance: "2023-09-01",
+    status: "operational",
+    image: null
   },
   {
-    id: '4',
-    name: 'Robot Soudeur Gamma',
-    reference: 'RS-2022-G',
-    location: 'Atelier Principal - Zone C',
-    installationDate: '2022-08-17',
-    technicalDocUrl: '/docs/robot-gamma-manual.pdf',
-    status: 'operational',
-    lastMaintenance: '2023-07-01',
+    id: "4",
+    name: "Metal Testing Unit MTU-7",
+    reference: "MTU-7-Pro",
+    location: "Building C - Lab Area",
+    department: "Quality Control",
+    installationDate: "2021-11-30",
+    lastMaintenance: "2023-01-18",
+    nextMaintenance: "2023-07-18",
+    status: "broken",
+    image: null
   },
   {
-    id: '5',
-    name: 'Convoyeur Omega',
-    reference: 'CV-2019-O',
-    location: 'Ligne d\'assemblage',
-    installationDate: '2019-03-10',
-    technicalDocUrl: '/docs/convoyeur-omega-manual.pdf',
-    status: 'operational',
-    lastMaintenance: '2023-06-20',
+    id: "5",
+    name: "Robotic Arm RA-9",
+    reference: "RA-9-Plus",
+    location: "Building B - Floor 2",
+    department: "Assembly",
+    installationDate: "2022-03-24",
+    lastMaintenance: "2023-02-28",
+    nextMaintenance: "2023-06-28",
+    status: "offline",
+    image: null
+  },
+  {
+    id: "6",
+    name: "Industrial Furnace IF-3000",
+    reference: "IF-3000-HT",
+    location: "Building D - Heat Treatment",
+    department: "Heat Treatment",
+    installationDate: "2021-07-12",
+    lastMaintenance: "2023-04-10",
+    nextMaintenance: "2023-10-10",
+    status: "operational",
+    image: null
   }
 ];
 
